@@ -201,6 +201,34 @@ file = "config/xenon-options.json"
 hash = "4e3d3129a3fbf2a2342721b981150e2702e9da773e45ec98fceec79b7e8404a9"
 
 [[files]]
+file = "kubejs/assets/kubejs/textures/block/example_block.png"
+hash = "783d78bd1ee61d3b32273670dff9d82c34cd74c5ae899a10f104f473828d5bbc"
+
+[[files]]
+file = "kubejs/assets/kubejs/textures/item/example_item.png"
+hash = "45a5f56eba6066ad05c70988a32b72c50cfeb6e35857739bd582007011ea002b"
+
+[[files]]
+file = "kubejs/client_scripts/cutscenes.js"
+hash = "152019ed6e0410a82805a95ea10f1ad1a17beaf2b50864d89b8fa9d172129ac7"
+
+[[files]]
+file = "kubejs/config/client.properties"
+hash = "4eb926c0bbd380e4cbc8175c7f28f7674ec3512d779f4907f2b808c18cfe5b9b"
+
+[[files]]
+file = "kubejs/config/common.properties"
+hash = "a2a64194702a3445ec1d6764067b0c9630b91994ff3c0cb5ab6a8be84123cf86"
+
+[[files]]
+file = "kubejs/server_scripts/example.js"
+hash = "a19b7c81a150bd965b153ded9c45ee7649eaad9e10d0a5ec1d662e7b15ceadb2"
+
+[[files]]
+file = "kubejs/startup_scripts/example.js"
+hash = "395c96d3ddd178821db851f387e91560e606ea752177f66d2016f12bd0542b8f"
+
+[[files]]
 file = "mods/3dskinlayers.pw.toml"
 hash = "aade74980123d37176d7488197d4bba4399aba3e35cd78feb7a1041518238744"
 metafile = true
@@ -318,6 +346,11 @@ metafile = true
 [[files]]
 file = "mods/coastal-waves.pw.toml"
 hash = "49f54ce2926c147a8affea14944492c63ce73888491bc031a9569551a88dc340"
+metafile = true
+
+[[files]]
+file = "mods/collective.pw.toml"
+hash = "a26cea970dd7ffc20aeb983912e72ba57e83f6e1a42a661a5b4250f77de25650"
 metafile = true
 
 [[files]]
@@ -806,6 +839,11 @@ hash = "f79cb80b6ea599fe4ca9404465277ff7edf25118976170c28827590febfcee7a"
 metafile = true
 
 [[files]]
+file = "mods/probejs.pw.toml"
+hash = "2a3a4d1558f48a49746b266248676f7d28b7b8b9d45f36645e41a8806028dce5"
+metafile = true
+
+[[files]]
 file = "mods/puzzles-lib.pw.toml"
 hash = "62a76c5212c04d15c27d7c1141f0a0d7d803aa10d172444359e4dacbdba6da7b"
 metafile = true
@@ -948,6 +986,11 @@ metafile = true
 [[files]]
 file = "mods/vanillabackport.pw.toml"
 hash = "56a7195e6819ed4bc3176d7ce49b0a39963ea04b76793e3878de91630fd9898e"
+metafile = true
+
+[[files]]
+file = "mods/village-spawn-point.pw.toml"
+hash = "75b3fdf0d8b1d6685b11c5d6c43c9dc8660f47f006e42872d2e02461d37d316d"
 metafile = true
 
 [[files]]
@@ -2077,8 +2120,12 @@ file = "resourcepacks/required/chronicles-data/data/modpack/advancements/lore/ro
 hash = "af3a552722f8b33f0c1569f24c508581374fc78fdc3f20e5262f5e5d42ead836"
 
 [[files]]
+file = "resourcepacks/required/chronicles-data/data/modpack/functions/cutscenes/wither.mcfunction"
+hash = "876aa59954f4aecb31df68080648c71e0ae15188b39eddf225ef7e2843930ab8"
+
+[[files]]
 file = "resourcepacks/required/chronicles-data/data/modpack/functions/load.mcfunction"
-hash = "420d986163c9389291dbb0ddaae44c648604c9d2d5d13f2fa0b03c26f74e98da"
+hash = "59bdaff28a60b22073e183c6f4ef2be486f5a497787ee23736e59f4331e14e42"
 
 [[files]]
 file = "resourcepacks/required/chronicles-data/data/modpack/functions/unfold_adv.mcfunction"
@@ -2189,4 +2236,4 @@ hash = "39ca5a1351ffd7e54b4d84b4f137bce704774707f19d5d5a6321ab75d4e4068d"
 
 [[files]]
 file = "unsup.toml"
-hash = "9d86b817280b1f3cbdab052137c2137662f4dd16833eaca55f11679879cdaae1"
+hash = "0e384eae0c6f68c32f8f068e1d04c2ca12cc87fbbe6eb6d0be9803049de9753b"
