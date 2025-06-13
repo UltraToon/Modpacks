@@ -1,0 +1,105 @@
+#!/bin/bash
+set -o pipefail # Posix 2022 standards allow this
+MODE="$1" TERMINAL="$2" MENU_ARGS=("${@:3}")
+pkill -x mew && exit 1 # prevents dupe menus, closing previous instances (easy exit)
+drun() {
+    data=$(find ${XDG_DATA_DIRS//:/ } \( -type f -o -type l \) -path "*/applications/*.desktop" -print0 2>/dev/null | xargs -0 awk '
+        /^Name=/ { name = substr($0, 6) }
+        /^Exec=/ { exec = substr($0, 6); gsub(/ *%[a-zA-Z]/,"",exec)}
+        /^Terminal=/ { term = tolower(substr($0, 10)) }
+        name && exec && term != "" { print name "|" exec "|" term; name = exec = term = ""}')
+    echo "$data" | cut -d'|' -f1 | mew -i -p " Launch " "${MENU_ARGS[@]}" | {
+        read -r selected && IFS='|' read -r _ exec term <<< "$(echo "$data" | grep "^$selected|" | head -1)"
+        [ -z "$exec" ] && exec="$selected"
+        [ "$term" == "true" ] && exec="$TERMINAL -e $exec"
+        nohup bash -c "$exec" >/dev/null 2>&1 & #disown
+    }
+}
+audio() {
+    select_device() {
+        local device_type="$1"
+        node=$(pw-dump Node | jq -r --arg type "$device_type" '
+            .[]|select(
+                .info.props|.["media.class"] == $type and
+                has("device.api")
+            )|.info.props["node.description"]
+        ' | mew -i -p "󱑽 Select device " "${MENU_ARGS[@]}")
+        id=$(pw-dump Node | jq --arg desc "$node" -r '
+            .[]|select(
+                .info.props|."api.alsa.pcm.stream" == "playback" and
+                ."node.description" == $desc
+            )|.info.props["object.id"]
+        ')
+        wpctl set-default "$id" || true
+    }
+    sink_stat="$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -q "MUTED" && echo ' Enable' || echo ' Disable')"
+    source_stat="$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | grep -q "MUTED" && echo ' Enable' || echo ' Disable')"
+    case "$(printf "󰕾 Output Devices\n Input Devices\n$sink_stat Output\n$source_stat Input" | mew -i -p " Audio " "${MENU_ARGS[@]}")" in
+        *"$sink_stat Output"*) wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle ;;
+        *"$source_stat Input"*) wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle ;;
+        *"Output Devices"*) select_device "Audio/Sink" ;;
+        *"Input Devices"*) select_device "Audio/Source" ;;
+    esac
+}
+power() {
+    case "$(printf "󰐥 Power Off\n󰜉 Reboot\n󰍃 Logout" | mew -i -p "[ $(uname -r | cut -d'.' -f1,2)   $(df -h / | awk 'NR==2 {print $5}')  $(uptime -p | sed -E 's/up//; s/hours?/hrs/; s/minutes?/min/')] 󱩛 Power " "${MENU_ARGS[@]}")" in
+        *"Power Off"*) doas poweroff ;;
+        *"Reboot"*) doas reboot ;;
+        *"Logout"*) pkill -n -x dwl ;;
+    esac
+}
+# helper function
+burp() { slurp -b 000000C0 -c 928374FF -B 000000C0 -w 1 -d </dev/null 2>/dev/null; }
+rec() {
+    case "$1" in
+        "stop")
+            pkill -SIGINT wf-recorder
+            pactl unload-module module-loopback
+            pactl unload-module module-null-sink
+            file="/tmp/vid.mp4"
+            [[ ! -f "$file" ]] && return
+            dest="$HOME/Videos/$(date "+%Y-%m-%d_%H-%M-%S")"
+            case "$(printf "󰩎 Upload MP4 (<512MB)\n Save MP4\nBoth [󰩎 & ]\n GIFify" | mew -i -p "[ REC STOPPED] 󱋆 Actions " "${MENU_ARGS[@]}")" in
+                *Upload*) curl -s -F "file=@$file" https://0x0.st | wl-copy ;;
+                *Save*) mv "$file" "${dest}.mp4" | wl-copy -t video/mp4 ;;
+                *Both*) cp "$file" "${dest}.mp4"; curl -s -F "file=@$file" https://0x0.st | wl-copy;;
+                *GIFify*)
+                #ffmpeg -y -i "$file" -filter_complex "palettegen=stats_mode=full" "/tmp/vidpalette.png"
+                #ffmpeg -y -i "$file" -i "/tmp/vidpalette.png" -filter_complex "paletteuse=dither=sierra2_4a" "${dest}.gif"
+                ffmpeg -y -i "$file" -vf "scale=1280:720,fps=15" -c:v libx264 -crf 20 -preset veryfast -c:a copy "${dest}.mp4"
+                ffmpeg -y -i "${dest}.mp4" -filter_complex "fps=15,scale=720:-1:flags=lanczos" "${dest}.gif"
+                curl -s -F "file=@$file" https://0x0.st | wl-copy
+                rm -f "/tmp/vidpalette.png" ;;
+            esac
+            rm -f "$file"
+            return
+            ;;
+        *)
+            pactl list short sinks | grep -q 'Combined' || {
+                pactl load-module module-null-sink sink_name=Combined >/dev/null
+                pactl load-module module-loopback sink=Combined source=@DEFAULT_SINK@.monitor >/dev/null
+                pactl load-module module-loopback sink=Combined source=@DEFAULT_SOURCE@ >/dev/null
+            }
+            wf-recorder -y --audio=Combined.monitor -g "$(burp)" -c h264_vaapi -C aac -d /dev/dri/renderD128 -r 60 "$@" &>/dev/null
+            ;;
+    esac
+}
+screen() {
+    ADAPTIVE_SYNC=$(wlr-randr | grep -q "Adaptive Sync: enabled" && printf "Disable" || printf "Enable")
+    case "$(printf "$(pgrep -x "wf-recorder" >/dev/null && echo " Stop Recording\n") Shot\n Video\n Pick Color\n $ADAPTIVE_SYNC Adaptive Sync\n󰔎 Toggle Gammastep\n󰸉 Random Wallpaper" | mew -i -p "󰹑 Screen " "${MENU_ARGS[@]}")" in
+        *"Stop Recording"*) rec "stop" ;;
+        *"Shot"*) grim -g "$(burp)" - | wl-copy -t image/png ;;
+        *"Video"*) rec -f "/tmp/vid.mp4" ;;
+        *"Pick Color"*) grim -g "$(slurp -p -b 00000000 </dev/null)" - | ffmpeg -i - -vf scale=1:1:flags=neighbor,format=rgb24 -f rawvideo - 2>/dev/null | od -tx1 -An | awk '{printf $1$2$3}' | wl-copy ;;
+        *"Adaptive Sync"*) wlr-randr --output "HDMI-A-1" --adaptive-sync "${ADAPTIVE_SYNC,,}"d ;;
+        *"Gammastep"*) pkill gammastep || gammastep -c "$XDG_CONFIG_HOME/gammastep/gammastep.conf" & ;;
+        *"Random Wallpaper"*) pkill -x wbg; find "$HOME/Pix/wallpapers" -type f | shuf -n 1 | xargs wbg ;;
+    esac
+}
+case "$MODE" in
+    "drun")   drun ;;
+    "audio")  audio ;;
+    "power")  power ;;
+    "screen") screen ;;
+    *)        echo "Usage: vmenu drun|audio|power|screen [terminal] [menu args]" ;;
+esac

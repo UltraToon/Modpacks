@@ -1,0 +1,11 @@
+# Currently applied patches
+gaps [sewn]
+xwayland handle minimize
+bar [sewn]
+alwayscenter
+cfact
+scratchpad
+swallow 0.7
+
+# SLSTATUS
+signals

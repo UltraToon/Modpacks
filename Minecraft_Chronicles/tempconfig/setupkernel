@@ -1,0 +1,46 @@
+#!/bin/sh
+set -eu
+
+[ "$(id -u)" -eq 0 ] || { echo "Run this as root."; exit 1; }
+grep -q "KERNELRELEASE" Makefile || { echo "Not in any linux source directory."; exit 1; }
+command -v jq >/dev/null || { echo "Utility 'jq' not found! Install it."; exit 1; }
+
+BOOT_DIR="/boot"
+KERNEL_IMAGE="arch/x86/boot/bzImage"
+
+LATEST=$(curl -s https://www.kernel.org/releases.json | jq -r '.latest_stable.version')
+CURRENT=$(make kernelversion)
+
+[ "$CURRENT" != "$LATEST" ] && {
+  printf "Upgrade %s -> %s? [Y/n] " "$CURRENT" "$LATEST"
+  read -r ANS
+  [ "${ANS:-Y}" = Y ] && {
+    echo "Cleaning up /boot (old images and broken symlinks)..."
+    find "$BOOT_DIR" \( -name "*$CURRENT*" -type f -delete \) -o \( -xtype l -delete \)
+    echo "Creating ../linux-$LATEST"
+    cd .. && curl -s -O "https://cdn.kernel.org/pub/linux/kernel/v${LATEST%%.*}.x/linux-${LATEST}.tar.xz"
+    tar xf "linux-$LATEST.tar.xz" && rm "linux-$LATEST.tar.xz"
+    echo "Starting config update..."
+    cp "linux-$CURRENT/.config" "linux-$LATEST/.config"
+    cd "linux-$LATEST" && make oldconfig
+  }
+}
+
+KERNEL_VERSION=$(make kernelrelease)
+
+echo "Compiling kernel version: $KERNEL_VERSION"
+make -j"$(nproc)"
+
+echo "Installing kernel version: $KERNEL_VERSION"
+install -m644 "$KERNEL_IMAGE" "$BOOT_DIR/vmlinuz-$KERNEL_VERSION"
+install -m644 .config "$BOOT_DIR/config-$KERNEL_VERSION"
+install -m644 System.map "$BOOT_DIR/System.map-$KERNEL_VERSION"
+
+ln -sf "vmlinuz-$KERNEL_VERSION" "$BOOT_DIR/vmlinuz"
+ln -sf "config-$KERNEL_VERSION" "$BOOT_DIR/config"
+ln -sf "System.map-$KERNEL_VERSION" "$BOOT_DIR/System.map"
+
+grub-mkconfig -o "$BOOT_DIR/grub/grub.cfg"
+
+echo "Kernel $KERNEL_VERSION is complete!"
+printf "Reboot now? [Y/n] " && read -r ans && [ "${ans:-Y}" = Y ] && reboot

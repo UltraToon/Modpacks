@@ -1,0 +1,52 @@
+#!/usr/bin/env sh
+exec <&-
+cd "$HOME" || exit 1
+# REQUIRED
+export QT_QPA_PLATFORM="wayland"
+export ELM_DISPLAY="wl"
+export SDL_VIDEODRIVER="wayland"
+export MOZ_ENABLE_WAYLAND=1
+export XDG_CURRENT_DESKTOP="dwl"
+export QT_QPA_PLATFORMTHEME=qt6ct
+# OPTIONAL
+export XCURSOR_THEME=BibataIce
+
+pgrep -x pipewire || (pipewire &)
+
+# Configure display
+wlr-randr --output HDMI-A-1 --mode 1920x1080@143.981 --adaptive-sync enabled &
+gammastep -c "$XDG_CONFIG_HOME"/gammastep/gammastep.conf & # gammastep hooks?
+
+wbg ~/Pix/wallpapers/severancehead.jpg &
+# Change wallpaper periodically
+#while true; do
+#    pkill wbg
+#    find "$HOME/Pix/wallpapers" -type f | shuf -n 1 | xargs wbg
+#    sleep 1800 # 30 min
+#done &
+
+# Phone Link
+kdeconnectd --replace &
+
+# 202020 Reminder
+#while true; do
+#    sleep 1350 # ~21 min
+#    playerctl pause
+#    pactl list short sink-inputs | awk '{print $1}' | xargs -I{} pactl set-sink-input-mute {} 1 2>/dev/null
+#    sleep 0.5
+#    pw-play "$HOME"/.local/bin/202020rule.mp3
+#    sleep 0.5
+#    pactl list short sink-inputs | awk '{print $1}' | xargs -I{} pactl set-sink-input-mute {} 0 2>/dev/null
+#done &
+
+#wtw ~/sucklesswl/wtw/scripts/CanvasStat & # conky
+    
+# Start foot terminal server
+foot --font DepartureMonoNerdFont:size=12 --server &
+
+mkdir -p "$HOME/.local/share/icons/default"
+cat > "$HOME/.local/share/icons/default/index.theme" << EOF
+[Icon Theme]
+Inherits=$XCURSOR_THEME
+EOF
+gsettings set org.gnome.desktop.interface cursor-theme "$XCURSOR_THEME"

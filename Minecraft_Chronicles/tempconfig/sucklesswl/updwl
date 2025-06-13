@@ -1,0 +1,17 @@
+#!/bin/bash
+cd ./dwl || exit
+if [[ -n "$(git status --porcelain)" ]]; then
+    git add .
+    git commit -m "$(date) - $(git diff --cached --name-status | tr '\n' ' ')"
+fi
+su -c 'make clean install'
+cd ../dwl-patches
+git fetch origin
+if ! git diff --quiet HEAD @{u}; then
+    read -p "Patch updates found! Pull now? (y/n): " choice
+    [[ "$choice" == [Yy]* ]] && git pull
+fi
+cd ../slstatus
+read -p "Update slstatus? (y/n): " choice
+[[ "$choice" == [Yy]* ]] && su -c 'make clean install'
+cd ..
