@@ -1,0 +1,13 @@
+name = "SpiffyHUD"
+filename = "spiffyhud_forge_3.0.0_MC_1.20.1.jar"
+side = "client"
+
+[download]
+url = "https://cdn.modrinth.com/data/wtOPHICQ/versions/YFZFjXQ7/spiffyhud_forge_3.0.0_MC_1.20.1.jar"
+hash-format = "sha512"
+hash = "4bbaaf201ea658098159b513bca865d4e64aa5eee1d51562cae823dbb10dffedbd026a0be9d82cf74e965c96bbd3c9c32d6b43a7e59d7317af6f9355f48068a7"
+
+[update]
+[update.modrinth]
+mod-id = "wtOPHICQ"
+version = "YFZFjXQ7"
