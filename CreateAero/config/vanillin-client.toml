@@ -1,0 +1,22 @@
+
+[block_entities]
+	"minecraft:trapped_chest" = "DEFAULT"
+	"minecraft:chest" = "DEFAULT"
+	"minecraft:shulker_box" = "DEFAULT"
+	"minecraft:bell" = "DEFAULT"
+	"minecraft:ender_chest" = "DEFAULT"
+
+[entities]
+	"minecraft:furnace_minecart" = "DEFAULT"
+	"minecraft:glow_item_frame" = " FORCE_ENABLE"
+	"minecraft:spawner_minecart" = "DEFAULT"
+	"minecraft:item_frame" = " FORCE_ENABLE"
+	"minecraft:block_display" = " FORCE_ENABLE"
+	"minecraft:chest_minecart" = "DEFAULT"
+	"minecraft:item_display" = " FORCE_ENABLE"
+	"minecraft:minecart" = "DEFAULT"
+	"minecraft:item" = " FORCE_ENABLE"
+	"minecraft:command_block_minecart" = "DEFAULT"
+	"minecraft:tnt_minecart" = "DEFAULT"
+	"minecraft:hopper_minecart" = "DEFAULT"
+

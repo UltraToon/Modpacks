@@ -1,0 +1,5 @@
+leavesCullingMode = "DEPTH"
+leavesCullingAmount = 3
+includeMangroveRoots = true
+endGatewayCulling = true
+entityModelCulling = true
