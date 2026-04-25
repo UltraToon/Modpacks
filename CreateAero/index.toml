@@ -1,9 +1,28 @@
 hash-format = "sha256"
 
 [[files]]
-file = "mods/asyncparticles.pw.toml"
-hash = "4f20967ee66eb96cbcfaa63bea9d3424ac45b7db414c9a491f31c86012f34fb5"
-metafile = true
+file = "config/enhanced_bes.properties"
+hash = "dbd9423ba430de592f18d9c2f2a9f5e19c41e1464d1e4355b1181b5492991cc6"
+
+[[files]]
+file = "config/ferritecore-mixin.toml"
+hash = "fee5dbdc8bdd6a22ae321282a6c7134624c3a318a3953718b65ca67b66683a13"
+
+[[files]]
+file = "config/immediatelyfast.json"
+hash = "194b0f47fe259832eb6ea084e022a1ef8aad6ca08ad0ef41934c1c4732be203d"
+
+[[files]]
+file = "config/modernfix-mixins.properties"
+hash = "ec8cb6b3fabc203fbf21c2af29501d5c6aaa770e5063e9d3142bc23023d484ae"
+
+[[files]]
+file = "config/moreculling.toml"
+hash = "ab260b312deaf9d45727d35e4622f64d7478182a0ad672740cb250df9e29d439"
+
+[[files]]
+file = "config/vanillin-client.toml"
+hash = "6bcbb0c29ca1159bf5e5c4b96be314557fc2251d7b770cbeddd5665be37965b6"
 
 [[files]]
 file = "mods/c2me-neoforge.pw.toml"
@@ -33,6 +52,11 @@ metafile = true
 [[files]]
 file = "mods/dynamic-fps.pw.toml"
 hash = "ae6fd52d8bdcbeca5bbe6db840f22f92c1928fe0fda22017b19612b9b00a245a"
+metafile = true
+
+[[files]]
+file = "mods/e4mc.pw.toml"
+hash = "36732fd7fdad0831fdaef0c806def4ebcab5084bfd851bcff5e948923cd1b1d7"
 metafile = true
 
 [[files]]
@@ -99,3 +123,11 @@ metafile = true
 file = "mods/sodium.pw.toml"
 hash = "0281ed9713f3141bdac363056a791845510e14761ea65b4b2813cf96d664b20a"
 metafile = true
+
+[[files]]
+file = "unsup-1.2.2.jar"
+hash = "d78d04ebe365d1b9db83b89bc4129905901c3644e7566ee9c8d316ffbaa4ace0"
+
+[[files]]
+file = "unsup.ini"
+hash = "76f64c83e0bf49300fadda149378d2ac958cd7b773d2f3308f276c3deb7111b4"
