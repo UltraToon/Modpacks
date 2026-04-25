@@ -55,11 +55,6 @@ hash = "ae6fd52d8bdcbeca5bbe6db840f22f92c1928fe0fda22017b19612b9b00a245a"
 metafile = true
 
 [[files]]
-file = "mods/e4mc.pw.toml"
-hash = "36732fd7fdad0831fdaef0c806def4ebcab5084bfd851bcff5e948923cd1b1d7"
-metafile = true
-
-[[files]]
 file = "mods/enhanced-block-entities-neoforged.pw.toml"
 hash = "ba19e88c2de56b0dbfc1731333e983dfaf0abb900fe36d1893e0cf70077e6ef5"
 metafile = true
@@ -127,6 +122,11 @@ metafile = true
 [[files]]
 file = "mods/sodium.pw.toml"
 hash = "0281ed9713f3141bdac363056a791845510e14761ea65b4b2813cf96d664b20a"
+metafile = true
+
+[[files]]
+file = "mods/world-host.pw.toml"
+hash = "b844c10676b5911a4d2af32710d21fa22eafafcb6e1e3505fb8651b643cd99f7"
 metafile = true
 
 [[files]]
